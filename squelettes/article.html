@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html dir="#LANG_DIR" lang="#LANG" xml:lang="#LANG" >
+	<head>
+		<meta charset="utf-8" />
+		<title>[(#NOM_SITE_SPIP|textebrut)][ - (#SLOGAN_SITE_SPIP|textebrut)]</title>
+		[<meta name="description" content="(#DESCRIPTIF_SITE_SPIP|couper{150}|textebrut)" />]
+		<meta name="keywords" content=" " />
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" /> 
+		<link rel="icon" type="image/png" href="#CHEMIN{design/icon.png}" />
+		<link href="#CHEMIN{bootstrap/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
+		<link href="#CHEMIN{css/reset.css}" rel="stylesheet" type="text/css"/>
+		<link href="#CHEMIN{css/style.css}" rel="stylesheet" type="text/css"/>
+		<script type="text/javascript" src="#CHEMIN{js/jquery-2.1.4.min.js}"></script>
+		<script type="text/javascript" src="#CHEMIN{js/ghi-nav.js}"></script>
+	</head>
+	<body>
+	<BOUCLE_section(RUBRIQUES) {racine}{lang=#LANG}>
+		<header>
+			<div class="container">
+				<div class="row">
+					<INCLURE{fond=inclure/logo-btn,env} />
+					
+					<nav class="col-sm-6 col-md-7 col-lg-8 menu">
+						<div class="row hidden-xs">
+							<div class="col-lg-12">
+								#MENU_LANG
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-12">
+								<ul>
+									<BOUCLE_nav(RUBRIQUES) {id_parent} >
+										<li><a href="#URL_RUBRIQUE[&lang=(#LANG)]">#TITRE</a></li> 
+									</BOUCLE_nav>
+									<li class="hidden-xs btn-photo-pc"><a href="#"><img src="#CHEMIN{design/icon-photo.png}" alt="photo"/></a></li>
+									<li class="hidden-sm hidden-md hidden-lg"> #MENU_LANG </li>
+								</ul>
+							</div>
+						</div>
+					</nav>
+				</div>
+			</div>
+		</header>
+		
+		
+		<section>
+			<BOUCLE_content(ARTICLES) {id_article}>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<h1>#TITRE</h1>
+						
+					</div>
+					<div class="col-md-6">
+						<h2>#SOUSTITRE</h2>
+						<p class="date">Le [(#DATE|affdate)], par <BOUCLE_auteur(AUTEURS) {id_article}><a href="#URL_AUTEUR[&lang=(#LANG)]">#NOM</a></BOUCLE_auteur></p>
+						<p>#TEXTE</p>
+						<p>#PS</p>
+
+						<BOUCLE_rub(RUBRIQUES) {id_rubrique}>
+						<a href="#URL_RUBRIQUE[&lang=(#LANG)]">#TITRE</a>
+						</BOUCLE_rub>
+						<br><br>
+
+					</div>
+					[<div class="col-md-6 logo-article">
+					<!--<p>Le logo de l'article :</p> <br>-->
+					(#LOGO_ARTICLE)
+					</div>]
+					
+				</div>
+			</div>
+			</BOUCLE_content>
+		</section>
+		
+		<!--<INCLURE{fond=inclure/footer,env} />-->
+		<footer>
+			<ul>
+				<BOUCLE_footer(RUBRIQUES) {id_parent} >
+					<li><a href="#URL_RUBRIQUE[&lang=(#LANG)]">#TITRE</a></li> 
+				</BOUCLE_footer>
+			</ul>
+		</footer>
+		
+	</BOUCLE_section>
+	</body>	
+</html>
