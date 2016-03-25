@@ -2,17 +2,6 @@
 <meta charset="utf-8">
 <style>
 
-.axis text {
-  font: 10px sans-serif;
-}
-
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
-
 .hexagon {
   fill: none;
   stroke: #000;
@@ -26,13 +15,12 @@
 <script>
 
 //var margin = {top: 20, right: 20, bottom: 30, left: 40};
-var width = 800;
-var height = 500;
-
-var randomX = d3.random.normal(width / 2, 80);
-var randomY = d3.random.normal(height / 2, 80);
-var points = d3.range(2000).map(function() { return [randomX(), randomY()]; });
-
+var width = 1000;
+var height = 1000;
+var radius = 64;
+var etendu = 3;
+var padding = 1;
+          
 var color = d3.scale.linear()
     .domain([0, 20])
     .range(["white", "steelblue"])
@@ -40,7 +28,7 @@ var color = d3.scale.linear()
 
 var hexbin = d3.hexbin()
     .size([width, height])
-    .radius(20);
+    .radius(radius);
 
 //-------------------------------------------
 var svg = d3.select("body").append("svg")
@@ -55,47 +43,103 @@ svg.append("clipPath")
     .attr("width", width)
     .attr("height", height);
 
-svg.append("g")
-    .attr("clip-path", "url(#clip)")
+//création de la grille
+var grille = [];
+creaGrille();
+//
+
+var exas = svg.append("g")
   .selectAll(".hexagon")
-    .data(hexbin(points))
-  .enter().append("path")
-    .attr("class", "hexagon")
+    .data(grille)
+  .enter().append("g")
+    .attr("class", "hexagon");
+
+exas.append("path")
     .attr("d", hexbin.hexagon())
-    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-    .style("fill", function(d) { return color(d.length); });
+    .attr("transform", function(d) { 
+    		return "translate(" + d.x + "," + d.y + ")"; 
+    		})
+    .style("fill", function(d) {
+    		return color(d.length); 
+    		});
 
-	
-	
-	
-	
-	
-/*
-var x = d3.scale.identity()
-    .domain([0, width]);
+exas.append("text")
+    .attr("transform", function(d) { 
+    		return "translate(" + d.x + "," + d.y + ")"; 
+    		})
+    	.attr("text-anchor","middle")
+	.text(function(d, i){
+		return d.nom;
+	})
 
-var y = d3.scale.linear()
-    .domain([0, height])
-    .range([height, 0]);*/
+exas.append("image")
+    .attr("transform", function(d) { 
+    		return "translate(" + (d.x-(radius*2)) + "," + (d.y-(radius*2)) + ")"; 
+    		})
+    	.attr("width",(radius*2)+"px")
+    	.attr("height",(radius*2)+"px")
+    	.attr("xlink:href","papi.png")
+    	.on("click",function(d){
+    		console.log(d.nom);
+    	});
 	
-/*
-var xAxis = d3.svg.axis()
-    .scale(x)
-    .orient("bottom")
-    .tickSize(6, -height);
+function creaGrille(){
+	
+	//création de la grille
+	var id = 0,
+		limit1 = 0,
+		limit2 = etendu; //nombre d'hexagone autour du centre
+	
+    for (var j = -etendu; j <= etendu; j++) {
+        var i = limit1;
+        while (i <= limit2) {
+        		grille.push({
+                id: id++,
+                coordinates: [i, j],
+                lastSelected: 0,
+                type: 'regular',
+                idUti: -1,
+                login: "",
+                nbDoc: -1,
+                role: "",
+                resource: false,
+                length:i*j,
+                nom:"exa "+i+","+j
+                
+            });		        				        		
+            i++;
+        }
+        if (j < 0) {
+            limit1--;
+        } else {
+            limit2--;
+        }
+    }	
+	
+    // http://goo.gl/8djhT
+	var tilted = false, // true is horizontal alignment
+		size = radius*2; // hexagon size
+	
+    var stepX = tilted ? size * 3 / 4 : Math.sqrt(3) * size / 2,
+        stepY = tilted ? Math.sqrt(3) * size / 2 : size * 3 / 4,
+        offset = size / Math.sqrt(3) * 3 / 4;
+        
+   grille.map(function(d, i) {
+        var i = d.coordinates[0],
+            j = d.coordinates[1],
+            x = stepX * i + (!tilted ? offset * j : 0) + width / 2,
+            y = stepY * j + (tilted ? offset * i : 0) + height / 2;
+        d.centroid = [Math.round(x * 1e2) / 1e2, Math.round(y * 1e2) / 1e2];
+        d.x = Math.round(x * 1e2) / 1e2;
+        d.y = Math.round(y * 1e2) / 1e2;
+        d.visible = !outbounds(x, y);
+    });
 
-var yAxis = d3.svg.axis()
-    .scale(y)
-    .orient("left")
-    .tickSize(6, -width);
+}	
 
-svg.append("g")
-    .attr("class", "y axis")
-    .call(yAxis);
+function outbounds(x, y) {
+    return x < padding || x > width - padding || y < padding || y > height - padding;
+}
 
-svg.append("g")
-    .attr("class", "x axis")
-    .attr("transform", "translate(0," + height + ")")
-    .call(xAxis);*/
 
 </script>
