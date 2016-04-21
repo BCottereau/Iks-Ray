@@ -1,4 +1,4 @@
-/* Projet X-CODE */
+/* Projet iks ray */
 @font-face {
     font-family: 'comfortaabold';
     src: url('../fonts/../fonts/comfortaa_bold-webfont.eot');
@@ -50,8 +50,7 @@
 
 header{
 	background-color:#fff;
-	/*padding-top:16px;
-	padding-bottom:16px;*/
+	border-bottom:4px solid #48c0eb;
 }
 @media (max-width: 767px){ 
 	header{
@@ -68,32 +67,36 @@ nav p{color:#452c1b;}
 header a{color:#452c1b;}
 header a:hover{color:#ea0806;}
 
-header li:nth-child(2) a:hover{color:#19f219;}
-header li:nth-child(3) a:hover{color:#2a0fef;}
-header li:nth-child(4) a:hover{color:#00c9ff;}
-header li:nth-child(5) a:hover{color:#ff69a1;}
-header li:nth-child(6) a:hover{color:#ffff00;}
+header li:nth-child(2) a:hover{color:#373393;}
+header li:nth-child(3) a:hover{color:#77b735;}
+header li:nth-child(4) a:hover{color:#951d2d;}
+header li:nth-child(5) a:hover{color:#6b1756;}
+header li:nth-child(6) a:hover{color:#c4be1e;}
 
 
 nav li a{
 	padding:15px;
 	font-size:20px;
 }
+.formulaire_menu_lang{
+	color:#c6c6c6;
+	font-family: 'comfortaaregular';
+	font-size:14px;
+}
+.formulaire_menu_lang a{display:inline-block;}
 
 @media (min-width: 768px){  /* grand ecran */
 	nav{
 		text-align:right;
-		padding-top:20px;
+		padding-top:85px;
 	}
-	nav ul{ padding-top:43px; }
 	nav li, nav li a{ display:inline-block;}
 
 }
 @media (min-width: 768px) and (max-width: 991px){  /* moyen ecran */
 	nav{
-		padding-top:10px;
+		padding-top:38px;
 	}
-	nav ul{ padding-top:5px; }
 }
 
 @media (max-width: 767px){  /* petit ecran */
@@ -110,13 +113,9 @@ nav li a{
 		background-color:#fff;
 		background-image:url("../design/menu-bg.png");
 		background-repeat:repeat-x;
+		border-bottom:4px solid #48c0eb;
 	}
 	nav li, nav li a{ display:block;}
-	
-	nav #menu_lang{
-		margin-top:10px;
-		margin-bottom:15px;
-	}
 
 }
 
@@ -158,10 +157,16 @@ nav li a{
 
 /* -----------------------------------------GENERAL----------------------------------------------------- */
 
-body{ background-color:#e0d5be; }
-/*body{ background-color:#f2ebdd; }*/
+body{ 
+	background-color:#c6c6c6; 
+}
+#content{
+	background-color:#fff; 
+	background-image:url("../design/bg.png");
+	background-repeat:repeat-x;
+}
 
-p, select, textarea, section input[type=text], section li{
+p, select, textarea, .content input[type=text]{
 	font-family: 'comfortaaregular';
 	font-size: 16px;
 }
@@ -186,7 +191,7 @@ h2{
 }
 h3{
 	font-size:26px;
-	font-family:'comfortaaregular';
+	font-family:'comfortaabold';
 }
 h4{
 	font-size:18px;
@@ -196,57 +201,25 @@ h4{
 h1, h2, h3, h4, section p, section li{color:#452c1b;}
 
 
-/* -------------------------Content----------------------- */
+/* -------------------------Content section----------------------- */
 
 section{
 	padding-top:25px;
 	padding-bottom:25px;
-	background-color:#f2ebdd;
 }
 
 section p{
 	line-height:24px;
 	margin-bottom:25px;
 }
-section li{line-height:24px;}
-section ul{
-	list-style-type: disc;
-	margin-left:20px;
-}
 
-section ol{
-	counter-reset: preparation;
-	margin-left:7px;
-    list-style-type: none;
-}
-section ol li {
-    counter-increment: preparation; 
-    list-style-type: none;
-}
-section ol li:before{
-	content: counter(preparation, decimal) " .";
-	font-family: 'comfortaabold';
-    margin-left: 0;
-    padding-right: 5px;
-}
-
-.logo-article {
-	text-align:center;
-}
-.logo-article img{
-	width:90%;
-	height:auto;
-}
-
-
-.date, .date a{
+.date{
 	font-style : italic;
 	margin-bottom:10px;
-	font-family: 'comfortaathin';
 }
 
-section a{color:#452c1b;}
-section a:hover{color:#ea0806;}
+section a{color:#48c0eb;}
+section a:hover{color:#fbb03b;}
 section li{margin-bottom:5px;}
 
 section a{
@@ -263,10 +236,11 @@ text-decoration:underline;
 /* --------------------------------------FOOTER--------------------------------------------------- */
 
 footer{
-	background-color:#e0d5be;
+	background-color:#c6c6c6;
 	padding-top:20px;
 	padding-bottom:40px;
 	text-align:center;
+	border-top:4px solid #faaf3a;
 }
 footer li{
 	display:inline;

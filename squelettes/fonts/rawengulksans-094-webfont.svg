@@ -237,7 +237,7 @@
 <glyph unicode="&#x205f;" horiz-adv-x="454" />
 <glyph unicode="&#x20ac;" horiz-adv-x="1370" d="M0 512l8 74h146q-9 56 -9 108v37h-71l8 74h72q20 130 84.5 245t160 197.5t220.5 130t260 47.5q237 0 424 -135l14 -10v-111h-74v72q-168 113 -364 113q-244 0 -427 -157t-223 -392h750l-10 -74h-748q0 -6 -1 -18.5t-1 -18.5q0 -46 10 -108h676l-8 -74h-651 q59 -208 235 -341.5t398 -133.5q209 0 378 121l46 -60q-191 -135 -424 -135q-253 0 -450.5 155t-258.5 394h-170z" />
 <glyph unicode="&#x2122;" horiz-adv-x="1974" d="M111 1317v74h657v-74h-293v-805h-74v805h-290zM807 512v74h2l96 809h58l370 -805l371 805h57l113 -865l-72 -10l-92 713l-342 -744h-68l-342 742l-86 -719h-65z" />
-<glyph unicode="&#x25fc;" horiz-adv-x="975" d="M0 0v975h975v-975h-975z" />
+<glyph unicode="&#x25fc;" horiz-adv-x="972" d="M0 0v973h973v-973h-973z" />
 <glyph unicode="&#xfb02;" horiz-adv-x="876" d="M37 879v71h145v166q0 122 86 207.5t207 85.5q66 0 129 -29l-33 -65q-48 20 -96 20q-91 0 -155 -64t-64 -155v-166h256v-71h-256v-879h-74v879h-145zM694 0v1391h74v-1391h-74z" />
 <glyph unicode="&#xfb04;" horiz-adv-x="1388" d="M37 879v71h145v148q0 129 91.5 220t220.5 91q87 0 168 -51l-39 -60q-55 37 -129 37q-98 0 -168 -69.5t-70 -167.5v-148h438v166q0 122 86 207.5t207 85.5q66 0 129 -29l-33 -65q-48 20 -96 20q-91 0 -155 -64t-64 -155v-166h256v-71h-256v-879h-74v879h-438v-879h-74v879 h-145zM1206 0v1391h74v-1391h-74z" />
 <hkern g1="A,Agrave,Aacute,Acircumflex,Atilde,Adieresis,Aring" 	g2="C,G,O,Q,Ccedilla,Ograve,Oacute,Ocircumflex,Otilde,Odieresis,Oslash" 	k="74" />

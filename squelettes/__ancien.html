@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html dir="#LANG_DIR" lang="#LANG">
+	<head>
+		<meta charset="utf-8" />
+		<title>#NOM_SITE_SPIP</title>
+		<meta name="description" content=" " />
+		<meta name="keywords" content=" " />
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" /> 
+		<link rel="icon" type="image/png" href="#CHEMIN{design/icon.png}" />
+		<link href="#CHEMIN{bootstrap/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
+		<link href="#CHEMIN{css/reset.css}" rel="stylesheet" type="text/css"/>
+		<link href="#CHEMIN{css/style.css}" rel="stylesheet" type="text/css"/>
+		<script type="text/javascript" src="#CHEMIN{js/jquery-2.1.4.min.js}"></script>
+		<script type="text/javascript" src="#CHEMIN{js/ghi-nav.js}"></script>
+	</head>
+	<body>
+		<header>
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-4">
+						<a href="#URL_SITE_SPIP?lang=#LANG" title="#NOM_SITE_SPIP"><img id="logo" src="#CHEMIN{design/logo.png}" title="#NOM_SITE_SPIP" alt="logo #NOM_SITE_SPIP"/></a>
+						<img id="logo-mini" src="#CHEMIN{design/logo-mini.png}" title="#NOM_SITE_SPIP" alt="logo #NOM_SITE_SPIP"/>
+						<img id="btn-nav" src="#CHEMIN{design/bstrap.png}" alt="menu"/>
+						<img id="btn-photo-phone" src="#CHEMIN{design/icon-photo.png}" alt="photo"/>
+					</div>
+					<nav class="col-sm-8 menu">
+						
+						<ul>
+							<li><a href="#URL_SITE_SPIP?lang=#LANG">Accueil</a></li>
+							<li><a href="#">L'équipe</a></li>
+							<li><a href="#">Votre compte</a></li>
+							<li><INCLURE{fond=inclure/menu_langues,env}/></li>
+							<li class="hidden-xs btn-photo-pc"><a href="#"><img src="#CHEMIN{design/icon-photo.png}" alt="photo"/></a></li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</header>
+		
+		<div id="content">
+			<section class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<h1>Sommaire</h1>
+						<p>Tout les articles</p>
+						
+					</div>
+					
+					<BOUCLE_article(ARTICLES){lang=#LANG}>
+						<div class="col-md-6">
+							<h2>#TITRE</h2>
+							<p class="date">#DATE</p>
+							<a href="#URL_ARTICLE">Lien</a>
+							<br>
+							<br>
+						</div>
+					</BOUCLE_article>
+				</div>
+			</section>
+		</div>
+		
+		
+		<footer>
+			<ul>
+				<li><a href="#URL_SITE_SPIP?lang=#LANG">Accueil</a></li>
+				<li><a href="#">L'équipe</a></li>
+				<li><a href="#">Votre compte</a></li>
+				<li><a href="#">Déconnexion</a></li>
+			</ul>
+		</footer>
+	</body>	
+</html>
