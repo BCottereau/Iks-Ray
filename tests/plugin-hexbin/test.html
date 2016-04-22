@@ -1,24 +1,31 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<style>
+<head>
+	<meta charset="utf-8">
+	<style>
 
-.hexagon {
-  fill: none;
-  stroke: #000;
-  stroke-width: .5px;
-}
+	.hexagon {
+	  fill: none;
+	  stroke: #000;
+	  stroke-width: .5px;
+	}
 
-</style>
+	</style>
+	<script src="jquery-2.1.4.min.js"></script>
+</head>
 <body>
+vert = art plastique <br>
+bleu = cinema <br>
+etc..<br>
+
 <script src="d3.v3.min.js"></script>
 <script src="d3.hexbin.min.js"></script>
 <script>
 
 //var margin = {top: 20, right: 20, bottom: 30, left: 40};
 var width = 1000;
-var height = 1000;
+var height = 520;
 var radius = 64;
-var etendu = 3;
+var etendu = 1;
 var padding = 1;
           
 var color = d3.scale.linear()
@@ -43,45 +50,65 @@ svg.append("clipPath")
     .attr("width", width)
     .attr("height", height);
 
-//création de la grille
-var grille = [];
-creaGrille();
-//
 
-var exas = svg.append("g")
-  .selectAll(".hexagon")
-    .data(grille)
-  .enter().append("g")
-    .attr("class", "hexagon");
+	var grille = [];
+	var livres = [];
+		
+	$.getJSON( "1.json", function( data ) {
+		
+		$.each( data, function( key, val ) {
+			livres.push(val);
+		});
 
-exas.append("path")
-    .attr("d", hexbin.hexagon())
-    .attr("transform", function(d) { 
-    		return "translate(" + d.x + "," + d.y + ")"; 
-    		})
-    .style("fill", function(d) {
-    		return color(d.length); 
-    		});
+	}).done(function() {
+		
+		//alert( livres[1].Titre );
+		//création de la grille
+		creaGrille();
+		
+		var exas = svg.append("g")
+			.selectAll(".hexagon")
+			.data(grille)
+			.enter().append("g")
+			.attr("class", "hexagon");
+			
 
-exas.append("text")
-    .attr("transform", function(d) { 
-    		return "translate(" + d.x + "," + d.y + ")"; 
-    		})
-    	.attr("text-anchor","middle")
-	.text(function(d, i){
-		return d.nom;
-	})
+		exas.append("path")
+			.attr("d", hexbin.hexagon())
+			.attr("transform", function(d) {
+				return "translate(" + d.x + "," + d.y + ")"; 
+			})
+			.style("fill", function(d) {
+				return d.bgcolor; 
+			});
+					
+		exas.append("text")
+			.attr("transform", function(d) {
+				return "translate(" + d.x + "," + d.y + ")"; 
+			})
+			.attr("text-anchor","middle")
+			.text(function(d, i){
+				return d.titre;
+			});
+			
+		exas.append("image")
+			.attr("transform", function(d){
+				return "translate(" + (d.x-(radius)) + "," + (d.y-(radius)) + ")"; 
+			})
+			.attr("width",(radius*0.8)+"px")
+			.attr("height",(radius*0.8)+"px")
+			.attr("xlink:href",function(d){
+				return d.couverture;
+				//return "livre.jpg";
+			})
+			.on("click",function(d){
+				console.log(d.nom);
+			});
+	
+	});
 
-exas.append("image")
-    .attr("transform", function(d) { 
-    		return "translate(" + (d.x-(radius*2)) + "," + (d.y-(radius*2)) + ")"; 
-    		})
-    	.attr("width",(radius*2)+"px")
-    	.attr("height",(radius*2)+"px")
-    	.attr("xlink:href","papi.png")
-    	.on("click",function(d){
-    		console.log(d.nom);
-    	});
+
+
 	
 function creaGrille(){
 	
@@ -89,11 +116,23 @@ function creaGrille(){
 	var id = 0,
 		limit1 = 0,
 		limit2 = etendu; //nombre d'hexagone autour du centre
+		
+		
+	//alert(livres[1].Titre);
 	
+	var bgcolor = "#eee";
+	var k = 0;
     for (var j = -etendu; j <= etendu; j++) {
         var i = limit1;
         while (i <= limit2) {
-        		grille.push({
+
+			if(livres[k].dispos[0].Collection == "Arts plastiques - SA"){bgcolor = "#5e5";}
+			else if(livres[k].dispos[0].Collection == "Psychologie - C"){bgcolor = "#e5e";}
+			else if(livres[k].dispos[0].Collection == "Cinéma - SC"){bgcolor = "#55e";}
+			else if(livres[k].dispos[0].Collection == "Philosophie - B"){bgcolor = "#e85";}
+			else{bgcolor = "#eee";}
+				
+        	grille.push({
                 id: id++,
                 coordinates: [i, j],
                 lastSelected: 0,
@@ -104,17 +143,26 @@ function creaGrille(){
                 role: "",
                 resource: false,
                 length:i*j,
-                nom:"exa "+i+","+j
+                nom:"exa "+i+","+j,
+				titre:"" + livres[k].Titre,
+				bgcolor: "" + bgcolor,
+				couverture: livres[k].couverture
                 
             });		        				        		
             i++;
+			k++;
         }
         if (j < 0) {
             limit1--;
         } else {
             limit2--;
         }
-    }	
+		
+    }
+	
+	
+	
+
 	
     // http://goo.gl/8djhT
 	var tilted = false, // true is horizontal alignment
@@ -135,7 +183,7 @@ function creaGrille(){
         d.visible = !outbounds(x, y);
     });
 
-}	
+}
 
 function outbounds(x, y) {
     return x < padding || x > width - padding || y < padding || y > height - padding;
@@ -143,3 +191,4 @@ function outbounds(x, y) {
 
 
 </script>
+</body>
