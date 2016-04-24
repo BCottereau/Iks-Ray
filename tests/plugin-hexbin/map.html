@@ -3,29 +3,46 @@
 	<meta charset="utf-8">
 	<style>
 
-	.hexagon {
-	  fill: none;
-	  stroke: #000;
-	  stroke-width: .5px;
-	}
+.hexagon {
+	fill: none;
+	stroke: #000;
+	stroke-width: 1px;
+}
+.hexagon:hover {
+	stroke: #fff;
+	stroke-width: 4px;
+}
+g text{
+	fill: #000;
+	stroke: none;
+	stroke-width: 0px;
+	font-size: 10px;
+	font-family: arial;
+}
+body{text-align:center;}
+p{font-family:arial;}
 
 	</style>
 	<script src="jquery-2.1.4.min.js"></script>
 </head>
 <body>
-vert = art plastique <br>
-bleu = cinema <br>
-etc..<br>
+<p id="titre">titre</p>
+<p id="collection">collection</p>
+<p id="cote" style="font-size:14px; color:#aaa">cote</p>
 
 <script src="d3.v3.min.js"></script>
 <script src="d3.hexbin.min.js"></script>
 <script>
 
 //var margin = {top: 20, right: 20, bottom: 30, left: 40};
-var width = 1000;
-var height = 520;
+var infoTitre = document.getElementById("titre");
+var infoColl = document.getElementById("collection");
+var infoCote = document.getElementById("cote");
+
+var width = 800;
+var height = 740;
 var radius = 64;
-var etendu = 1;
+var etendu = 3;
 var padding = 1;
           
 var color = d3.scale.linear()
@@ -54,7 +71,7 @@ svg.append("clipPath")
 	var grille = [];
 	var livres = [];
 		
-	$.getJSON( "1.json", function( data ) {
+	$.getJSON( "2.json", function( data ) {
 		
 		$.each( data, function( key, val ) {
 			livres.push(val);
@@ -70,6 +87,9 @@ svg.append("clipPath")
 			.selectAll(".hexagon")
 			.data(grille)
 			.enter().append("g")
+			.attr("id", function(d, i){
+				return "g-" + i;
+			})
 			.attr("class", "hexagon");
 			
 
@@ -82,18 +102,18 @@ svg.append("clipPath")
 				return d.bgcolor; 
 			});
 					
-		exas.append("text")
+		/*exas.append("text")
 			.attr("transform", function(d) {
 				return "translate(" + d.x + "," + d.y + ")"; 
 			})
 			.attr("text-anchor","middle")
 			.text(function(d, i){
 				return d.titre;
-			});
+			});*/
 			
 		exas.append("image")
 			.attr("transform", function(d){
-				return "translate(" + (d.x-(radius)) + "," + (d.y-(radius)) + ")"; 
+				return "translate(" + (d.x-(radius)+40) + "," + (d.y-(radius)+40) + ")"; 
 			})
 			.attr("width",(radius*0.8)+"px")
 			.attr("height",(radius*0.8)+"px")
@@ -104,6 +124,38 @@ svg.append("clipPath")
 			.on("click",function(d){
 				console.log(d.nom);
 			});
+			
+		svg.append("image")
+			.attr("width",(radius*2.38)+"px")
+			.attr("height",(radius*2.38)+"px")
+			.attr("id", "select")
+			.attr("xlink:href", "select.png");
+			
+		var select = document.getElementById("select");
+		select.setAttribute("display", "none");
+		
+		var groupe = document.querySelectorAll("g .hexagon");
+		var nbrGroupe = groupe.length;
+		for(i = 0; i < nbrGroupe ; i++)
+		{
+			groupe[i].addEventListener("click", function(e){
+				//alert(e.target.parentNode.nodeName.toLowerCase());
+				var id = Number(e.target.parentNode.id.substr(2));
+				//alert( id );
+				//alert(livres[id].dispos[0].Collection);
+				//alert(grille[id].titre);
+				
+				infoColl.innerHTML = livres[id].dispos[0].Collection;
+				infoColl.style.color = grille[id].bgcolor;
+				infoCote.innerHTML = livres[id].dispos[0].Cote;
+				infoTitre.innerHTML = grille[id].titre;
+						
+				select.setAttribute("transform", "translate(" + (grille[id].x - 74) + "," + (grille[id].y - 80) + ")");
+				select.setAttribute("display", "block");
+				
+				
+			}, false);
+		}
 	
 	});
 
@@ -126,10 +178,18 @@ function creaGrille(){
         var i = limit1;
         while (i <= limit2) {
 
-			if(livres[k].dispos[0].Collection == "Arts plastiques - SA"){bgcolor = "#5e5";}
-			else if(livres[k].dispos[0].Collection == "Psychologie - C"){bgcolor = "#e5e";}
-			else if(livres[k].dispos[0].Collection == "Cinéma - SC"){bgcolor = "#55e";}
-			else if(livres[k].dispos[0].Collection == "Philosophie - B"){bgcolor = "#e85";}
+			if(livres[k].dispos[0].Collection == "Arts plastiques - SA"){bgcolor = "#8caf2c";}
+			else if(livres[k].dispos[0].Collection == "Cinéma - SC"){bgcolor = "#2c2c84";}
+			else if(livres[k].dispos[0].Collection == "Musique - SM"){bgcolor = "#9b212a";}
+			else if(livres[k].dispos[0].Collection == "Photographie - SP"){bgcolor = "#43aed4";}
+			else if(livres[k].dispos[0].Collection == "Arts du spectacle - ST"){bgcolor = "#d0177d";}
+			else if(livres[k].dispos[0].Collection == "Urbanisme - T"){bgcolor = "#d3bf09";}
+			else if(livres[k].dispos[0].Collection == "Géographie - X"){bgcolor = "#277038";}
+			else if(livres[k].dispos[0].Collection == "Bandes dessinées"){bgcolor = "#43aed4";}
+			else if(livres[k].dispos[0].Collection == "Sciences - L"){bgcolor = "#6b1756";}
+			else if(livres[k].dispos[0].Collection == "Informatique Tech - N"){bgcolor = "#2c2c84";}
+			else if(livres[k].dispos[0].Collection == "Philosophie - B"){bgcolor = "#674b37";}
+			else if(livres[k].dispos[0].Collection == "Psychologie - C"){bgcolor = "#ca8330";}
 			else{bgcolor = "#eee";}
 				
         	grille.push({
@@ -146,7 +206,8 @@ function creaGrille(){
                 nom:"exa "+i+","+j,
 				titre:"" + livres[k].Titre,
 				bgcolor: "" + bgcolor,
-				couverture: livres[k].couverture
+				couverture: livres[k].couverture,
+				etat: 0
                 
             });		        				        		
             i++;
