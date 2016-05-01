@@ -6,17 +6,21 @@
 .hexagon {
 	fill: none;
 	stroke: #000;
-	stroke-width: 1px;
+	stroke-width: 2px;
+}
+.voisin {
+	stroke-width: 6px;
+	stroke: #0f0;
 }
 .hexagon:hover {
-	stroke: #fff;
+	stroke: #00f;
 	stroke-width: 4px;
 }
 g text{
 	fill: #000;
 	stroke: none;
 	stroke-width: 0px;
-	font-size: 10px;
+	font-size: 16px;
 	font-family: arial;
 }
 body{text-align:center;}
@@ -29,6 +33,18 @@ p{font-family:arial;}
 <p id="titre">titre</p>
 <p id="collection">collection</p>
 <p id="cote" style="font-size:14px; color:#aaa">cote</p>
+<!--
+<svg width="450" height="450">
+  
+  <defs>
+      <pattern id="img-1" x="0" y="0" width="1" height="1">
+        <image width="112" height="140" xlink:href="livre.jpg"/>
+      </pattern>
+  </defs>
+  
+  <circle cx="180" cy="120" r="80" fill="url(#img-1)"/>
+</svg>
+-->
 
 <script src="d3.v3.min.js"></script>
 <script src="d3.hexbin.min.js"></script>
@@ -66,10 +82,23 @@ svg.append("clipPath")
     .attr("class", "mesh")
     .attr("width", width)
     .attr("height", height);
+	
+	/* fonction retourne l'id d'un hexagone à partir de X et Y */
+	function getHexaId( x, y){
+		var classX = "x" + x;
+		var classY = "y" + y;
+		var hexa = document.querySelector("." + classX + "." + classY);
+		var id = -1; /* retourne ce chiffre si l'hexagone n'existe pas (si on dépasse la map par exemple) */
+		
+		if(hexa){id = Number( hexa.id.substr(2));}
+		
+		return id;
+	}
 
 
 	var grille = [];
 	var livres = [];
+	var s = 0;
 		
 	$.getJSON( "2.json", function( data ) {
 		
@@ -90,27 +119,57 @@ svg.append("clipPath")
 			.attr("id", function(d, i){
 				return "g-" + i;
 			})
-			.attr("class", "hexagon");
+			.attr("class", function(d) { return "hexagon x" + d.coordinates[0] + " y" + d.coordinates[1]; });
 			
-
+		var groupe = document.querySelectorAll("g .hexagon");
+		var nbrGroupe = groupe.length;
+			
+		/*<defs>
+			  <pattern id="img-1" x="0" y="0" width="1" height="1">
+				<image width="112" height="140" xlink:href="livre.jpg"/>
+			  </pattern>
+		  </defs>*/
+		
+		for(i = 0 ; i < nbrGroupe ; i++)
+		{
+			svg.append("defs").append("pattern")
+			.attr("id", "img-" + i)
+			.attr("width", 1)
+			.attr("height", 1)
+			.attr("x", 0)
+			.attr("y", 0)
+			.append("image")
+			.attr("width", 112)
+			.attr("height", 152)
+			.attr("xlink:href", grille[i].couverture)
+			;
+		}
+		
 		exas.append("path")
 			.attr("d", hexbin.hexagon())
 			.attr("transform", function(d) {
 				return "translate(" + d.x + "," + d.y + ")"; 
 			})
-			.style("fill", function(d) {
+			.style("fill", function(d, i) {
 				return d.bgcolor; 
+				//return "#000";
 			});
-					
-		/*exas.append("text")
+		
+		exas.append("path")
+			.attr("d", hexbin.hexagon())
+			.attr("id", function(d, i) {
+				return "couv-" + i; 
+			})
 			.attr("transform", function(d) {
 				return "translate(" + d.x + "," + d.y + ")"; 
 			})
-			.attr("text-anchor","middle")
-			.text(function(d, i){
-				return d.titre;
-			});*/
+			.style("fill", function(d, i) {
+				//return d.bgcolor; 
+				return "url(#img-" + i + ")";
+			});
 			
+			
+		/*
 		exas.append("image")
 			.attr("transform", function(d){
 				return "translate(" + (d.x-(radius)+40) + "," + (d.y-(radius)+40) + ")"; 
@@ -120,27 +179,58 @@ svg.append("clipPath")
 			.attr("xlink:href",function(d){
 				return d.couverture;
 				//return "livre.jpg";
-			})
-			.on("click",function(d){
-				console.log(d.nom);
 			});
+		*/
+			
+		svg.append("path")
+			.attr("d", hexbin.hexagon())
+			.attr("id", "select-color")
+			.attr("transform", function(d) {
+				return "translate(" + 0 + "," + 0 + ")"; 
+			})
+			.style("fill", "#f00");
 			
 		svg.append("image")
 			.attr("width",(radius*2.38)+"px")
 			.attr("height",(radius*2.38)+"px")
 			.attr("id", "select")
 			.attr("xlink:href", "select.png");
+		/*	
+		exas.append("text")
+			.attr("transform", function(d) {
+				return "translate(" + d.x + "," + d.y + ")"; 
+			})
+			.attr("text-anchor","middle")
+			.text(function(d, i){
+				return d.nom;
+			});
+		*/
 			
 		var select = document.getElementById("select");
 		select.setAttribute("display", "none");
+		var selectColor = document.getElementById("select-color");
+		selectColor.setAttribute("display", "none");
 		
-		var groupe = document.querySelectorAll("g .hexagon");
-		var nbrGroupe = groupe.length;
+		select.addEventListener("click", function(){
+			/*alert( grille[s].titre + " \n " + livres[s].dispos[0].Collection);*/
+			/*alert( "x " + grille[s].coordinates[0] + " ,     y " + grille[s].coordinates[1]);*/
+			var test = getHexaId(grille[s].coordinates[0]+1, grille[s].coordinates[1]-1);
+			if(test >= 0)
+			{
+				/*document.getElementById(  "g-" + test ).classList.add("voisin");*/
+				alert( "La pièce en haut à droite se nomme : \n" + grille[test].titre );
+			}
+			else{alert("pas de voisin en haut à droite !");}
+		
+		}, true);
+		
+		
 		for(i = 0; i < nbrGroupe ; i++)
 		{
 			groupe[i].addEventListener("click", function(e){
 				//alert(e.target.parentNode.nodeName.toLowerCase());
 				var id = Number(e.target.parentNode.id.substr(2));
+				s = id;
 				//alert( id );
 				//alert(livres[id].dispos[0].Collection);
 				//alert(grille[id].titre);
@@ -152,6 +242,11 @@ svg.append("clipPath")
 						
 				select.setAttribute("transform", "translate(" + (grille[id].x - 74) + "," + (grille[id].y - 80) + ")");
 				select.setAttribute("display", "block");
+				selectColor.setAttribute("transform", "translate(" + (grille[id].x - 0) + "," + (grille[id].y - 0) + ")");
+				selectColor.setAttribute("display", "block");
+				$("#select-color").css("fill", grille[id].bgcolor);
+				
+				/*document.getElementById("couv-" + id).style.display = "none";*/
 				
 				
 			}, false);
