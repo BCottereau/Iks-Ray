@@ -33,6 +33,7 @@ p{font-family:arial;}
 <p id="titre">titre</p>
 <p id="collection">collection</p>
 <p id="cote" style="font-size:14px; color:#aaa">cote</p>
+<p><button id="btn"> Pose une Ligne </button></p>
 <!--
 <svg width="450" height="450">
   
@@ -48,13 +49,22 @@ p{font-family:arial;}
 
 <script src="d3.v3.min.js"></script>
 <script src="d3.hexbin.min.js"></script>
+<script src="queue.v1.min.js" ></script>
 <script>
 
 //var margin = {top: 20, right: 20, bottom: 30, left: 40};
 var infoTitre = document.getElementById("titre");
 var infoColl = document.getElementById("collection");
 var infoCote = document.getElementById("cote");
+	
+var svgLignes = [{url:"ligne-1.svg",svg:false,d:"M53.715-7.12V6.976c-15.673-0.001-57.306,0-86.59-50.039l12.165-7.121C4.492-7.121,38.987-7.12,53.715-7.12z"},
+	{url:"ligne-2.svg",svg:false,d:"M9.2-17.944c0-10.459,5.854-22.275,11.575-32.186l12.208,7.047c-10.579,18.321-10.64,25.907-8.829,29.043 c1.809,3.132,8.405,6.867,29.562,6.867V6.922c-15.707,0-34.648-1.581-41.768-13.914C10.013-10.34,9.2-14.049,9.2-17.944z"},
+	{url:"ligne-3.svg",svg:false,d:"M-53.63-7.172h5.887l0.067,0.001c0.293,0.005,29.468,0.549,47.504,0.001 C17.96-7.72,46.437-7.21,48.396-7.172h5.32V6.923l-5.518-0.001C47.901,6.916,18.294,6.372,0.256,6.92 c-18.127,0.551-46.187,0.04-48.132,0.003h-5.753L-53.63-7.172z"}];
 
+var grille = [];
+var livres = [];
+var s = 0;
+	
 var width = 800;
 var height = 740;
 var radius = 64;
@@ -94,12 +104,8 @@ svg.append("clipPath")
 		
 		return id;
 	}
-
-
-	var grille = [];
-	var livres = [];
-	var s = 0;
-		
+	
+			
 	$.getJSON( "2.json", function( data ) {
 		
 		$.each( data, function( key, val ) {
@@ -130,10 +136,10 @@ svg.append("clipPath")
 			  </pattern>
 		  </defs>*/
 		
-		for(i = 0 ; i < nbrGroupe ; i++)
-		{
-			svg.append("defs").append("pattern")
-			.attr("id", "img-" + i)
+		exas.append("defs").append("pattern")
+			.attr("id", function(d, i) {
+				return "img-" + i; 
+			})
 			.attr("width", 1)
 			.attr("height", 1)
 			.attr("x", 0)
@@ -141,9 +147,9 @@ svg.append("clipPath")
 			.append("image")
 			.attr("width", 112)
 			.attr("height", 152)
-			.attr("xlink:href", grille[i].couverture)
-			;
-		}
+			.attr("xlink:href", function(d) {
+				return d.couverture; 
+			});
 		
 		exas.append("path")
 			.attr("d", hexbin.hexagon())
@@ -167,8 +173,21 @@ svg.append("clipPath")
 				//return d.bgcolor; 
 				return "url(#img-" + i + ")";
 			});
+		
+		
+
+		exas.append("path")
+			.attr("transform", function(d){
+				return "transform", " translate(" + (d.x-(radius)+64) + "," + (d.y-(radius)+64) + ") rotate("+60+")"; 
+			})
+			.style("fill","green")
+			.attr("d", function(d, i){
+				if(i < 3){
+					return svgLignes[1].d; 
+				}
+			});
 			
-			
+					
 		/*
 		exas.append("image")
 			.attr("transform", function(d){
@@ -210,6 +229,22 @@ svg.append("clipPath")
 		select.setAttribute("display", "none");
 		var selectColor = document.getElementById("select-color");
 		selectColor.setAttribute("display", "none");
+		var btn = document.getElementById("btn");
+		
+		btn.addEventListener("click", function(){
+
+			document.getElementById("couv-" + s).style.display = "none";
+			
+			var ligneNum = prompt("Ligne numero  1, 2, 3", "0");
+			var rot = prompt("rotation : 0, 60 , 120 etc.", "0");
+			
+			d3.select("#g-" + s).append("path")
+			.attr("transform", " translate(" + (grille[s].x-(radius)+64) + "," + (grille[s].y-(radius)+64) + ") rotate("+rot+")" )
+			.style("fill","red")
+			.attr("d",svgLignes[ligneNum].d);	
+			
+			
+		}, true);
 		
 		select.addEventListener("click", function(){
 			/*alert( grille[s].titre + " \n " + livres[s].dispos[0].Collection);*/
