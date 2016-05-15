@@ -1,0 +1,92 @@
+/* Projet iks ray */
+
+body{
+	background-color:#fff;
+}
+.hexagon {
+	fill: none;
+	stroke: #000;
+	stroke-width: 2px;
+}
+.hexagon:hover {
+	stroke: #fff;
+	stroke-width: 4px;
+}
+g text{
+	fill: #000;
+	stroke: none;
+	stroke-width: 0px;
+	font-size: 16px;
+	font-family: arial;
+}
+/*body{text-align:center;}*/
+/*p{font-family:arial;}*/
+
+#interface-pose, #interface-infos{
+	display:none;
+	position:absolute;
+	left:0px; right:0px;
+	padding:10px;
+	color:#452c1b;
+	border-bottom:4px solid #48c0eb;
+	-webkit-box-shadow: 0 20px 10px 0 rgba(0,0,0,0.5);
+	box-shadow: 0 20px 10px 0 rgba(0,0,0,0.5);
+}
+#interface-infos{
+	z-index:500;
+	background-color:#ffffff;
+}
+#interface-pose{
+	z-index:600;
+	background-color:#ffffff;
+}
+#interface-pose button{
+	color:#fff;
+	background-color:#452c1b;
+	font-family: 'comfortaabold'; font-weight:normal;
+	border:0;
+	padding:10px 40px 10px 40px;
+}
+#interface-pose button:hover{
+	background-color:#48c0eb;
+}
+#interface-pose img{
+	cursor:pointer;
+	width:60px;
+	height:60px;
+	margin:1px 13px 5px 13px;
+}
+#interface-pose img:hover{
+	background-color:#48c0eb;
+}
+
+/* -----------------infos----------------- */
+#collection{
+	color:#fff;
+	background-color:#555;
+	padding:4px;
+	font-size:18px;
+	margin-bottom:5px;
+}
+#titre, #cote{
+	font-family: 'comfortaabold'; font-weight:normal;
+}
+#cote{
+	font-size:18px;
+}
+#infos-couverture{
+	height:113px;
+	width:auto;
+}
+
+
+
+
+
+
+
+
+
+
+
+
