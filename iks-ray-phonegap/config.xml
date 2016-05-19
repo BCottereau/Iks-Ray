@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="fr-ghislain-betatest-iks-ray-01ff32e1e18" version="1.1.2">
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="fr-ghislain-betatest-iks-ray-01ff32e1e18" version="1.2.1">
 	<name>iks'Ray</name>
 	
 	<description>
@@ -11,11 +11,14 @@
 		Ghislain GUY, Baptiste Cottereau
 	</author>
 	
+	<preference name="phonegap-version" value="cli-6.1.0" />
+	<preference name="orientation" value="portrait" />
+	
 	<icon src="icon.png" gap:role="default" />
 	<gap:plugin name="cordova-plugin-whitelist" source="npm" />
 	<gap:plugin name="cordova-plugin-camera" source="npm" />
 	<gap:plugin name="cordova-plugin-vibration" source="npm" />
 	<gap:plugin name="cordova-plugin-dialogs" source="npm" />
 	<gap:plugin name="phonegap-plugin-barcodescanner" source="npm" />
-	<access origin="http://jsonplaceholder.typicode.com/*" />
+	<access origin="http://images.amazon.com/images/*" />
 </widget>

@@ -48,7 +48,7 @@ var hexbin = d3.hexbin()
 //-------------------------------------------
 
 var zoom = d3.behavior.zoom()
-    .scaleExtent([0.5, 1.3])
+    .scaleExtent([0.5, 1])
     .on("zoom", zoomed);
 
 var svg = d3.select("#content").append("svg")
@@ -249,25 +249,54 @@ $("#info-equipe-joueur").html("Équipe : <br>" + equipes[equipeJoueur].theme);
 				if(grille[s].ligneNum == -1)
 				{
 					// appareil photo !
-					document.getElementById("couv-" + s).style.display = "none";
-					select.setAttribute("display", "none");
-					selectColor.setAttribute("display", "none");
-					selectRot.setAttribute("transform", "translate(" + (grille[s].x - 62) + "," + (grille[s].y - 112) + ")");
-					selectRot.setAttribute("display", "block");
 					
-					/*
-					var ligneNum = prompt("Ligne numero  0, 1, 2", "0");
-					var rot = prompt("rotation : 0, 60 , 120 etc.", "0");*/
-					
-					d3.select("#g-" + s).append("path")
-					.attr("transform", " translate(" + (grille[s].x-(radius)+64) + "," + (grille[s].y-(radius)+64) + ") rotate("+rot+")" )
-					.attr("id", "pose-en-cours")
-					.style("fill",equipes[equipeJoueur].couleur)
-					.attr("d",svgLignes[ligneNum].d);
+					cordova.plugins.barcodeScanner.scan(function(result){
+						if(!result.cancelled)
+						{
+							//alert(result.text);
+							var isbnJoueur = traiteIsbn(result.text);
+							var isbnMap = traiteIsbn(grille[s].isbn);
+							
+							isbnJoueur = isbnJoueur.substring(3,isbnJoueur.length);
+							
+							
+							/*alert("Joueur : " + result.text + "  map : " + grille[s].isbn);*/
+							alert("Joueur : " + isbnJoueur + "\n   Map : " + isbnMap);
+							
+							
+							if(isbnJoueur == isbnMap)
+							{
+							
+								document.getElementById("couv-" + s).style.display = "none";
+								
+								select.setAttribute("display", "none");
+								selectColor.setAttribute("display", "none");
+								selectRot.setAttribute("transform", "translate(" + (grille[s].x - 62) + "," + (grille[s].y - 112) + ")");
+								selectRot.setAttribute("display", "block");
+								
+								/*
+								var ligneNum = prompt("Ligne numero  0, 1, 2", "0");
+								var rot = prompt("rotation : 0, 60 , 120 etc.", "0");*/
+								
+								d3.select("#g-" + s).append("path")
+								.attr("transform", " translate(" + (grille[s].x-(radius)+64) + "," + (grille[s].y-(radius)+64) + ") rotate("+rot+")" )
+								.attr("id", "pose-en-cours")
+								.style("fill",equipes[equipeJoueur].couleur)
+								.attr("d",svgLignes[ligneNum].d);
 
-					$("#interface-pose").slideDown();
-					$("#interface-infos").slideUp();
-					mode = "pose";
+								$("#interface-pose").slideDown();
+								$("#interface-infos").slideUp();
+								mode = "pose";	
+							}
+							else
+							{
+								alert("Ce n'est pas le bon livre !");
+							}
+						}
+					}, function(error){
+						alert("Erreur : " + error);
+					});
+					
 				}
 				else{alert("L'équipe "+ equipes[grille[s].equipe].theme +" à déjà posé une ligne ici.");}
 			}
@@ -280,6 +309,7 @@ $("#info-equipe-joueur").html("Équipe : <br>" + equipes[equipeJoueur].theme);
 			{
 				//alert("tourne");
 				//d3.select("#pose-en-cours").attr("d",svgLignes[ligneNum].d);
+				navigator.vibrate(30);
 				rot += 60;
 				if(rot >= 360){rot = 0;}
 				
@@ -444,6 +474,16 @@ function getHexaId( x, y){
 	return id;
 }
 
+function traiteIsbn(isbn){
+	isbn = isbn.split("-");
+	isbn = isbn.join("");
+	isbn = isbn.split(" ");
+	isbn = isbn.join("");
+	isbn = isbn.split(".");
+	isbn = isbn.join("");
+	return isbn;
+}
+
 
 	
 	
@@ -519,12 +559,14 @@ function getHexaId( x, y){
 	
 	
 	
-	/*
+	
 	$('#btncodebarre').click(function(event){
 	
 		cordova.plugins.barcodeScanner.scan(function(result){
 			if(!result.cancelled)
 			{
+				alert(result.text);
+				/*
 				$('#isbn').text('isbn : ' + result.text);
 				
 				$.getJSON('https://www.googleapis.com/books/v1/volumes?q=' + result.text, 
@@ -534,13 +576,14 @@ function getHexaId( x, y){
 					$('#titre').text("aaaaaa");
 					$('#titre').text(data.items[0].volumeInfo.title);
 				});
+				*/
 			}
 		}, function(error){
 			alert("Erreur : " + error);
 		});
 	
 	});
-	*/
+	
 	
 	
 	/*
