@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html dir="#LANG_DIR" lang="#LANG">
+	<head>
+		<meta charset="utf-8" />
+		<title>#NOM_SITE_SPIP</title>
+		<!--<meta name="description" content=" " />
+		<meta name="keywords" content=" " />-->
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" /> 
+		<link rel="icon" type="image/png" href="#CHEMIN{design/icon.png}" />
+		<link href="#CHEMIN{bootstrap/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
+		<link href="#CHEMIN{css/reset.css}" rel="stylesheet" type="text/css"/>
+		<link href="#CHEMIN{css/style.css}" rel="stylesheet" type="text/css"/>
+		<link href="#CHEMIN{css/onepage.css}" rel="stylesheet" type="text/css"/>
+		<script type="text/javascript" src="#CHEMIN{js/jquery-2.1.4.min.js}"></script>
+		<script type="text/javascript" src="#CHEMIN{js/ghi-nav.js}"></script>
+	</head>
+	<body>
+		<header>
+			<INCLURE{fond=inclure/header, lang}>
+		</header>
+		
+		
+
+		<div id="content">
+			<section class="container">
+				<div class="row">
+					<div class="col-md-12 centre">
+						<h2>Iks'Ray</h2>
+						<p>Qu'est-ce que c'est ?</p>
+
+						
+						<object class="container-video" width="640" height="360">
+							<param name="movie" value="http://www.youtube.com/v/fbVUt_0U-QM"></param>
+							<param name="wmode" value="transparent"></param>
+							<embed src="http://www.youtube.com/v/fbVUt_0U-QM" type="application/x-shockwave-flash" wmode="transparent" width="640" height="360"></embed>
+						</object>
+						
+						<br><br>
+						<br><br>
+						
+					</div>
+				</div>
+				
+				<div class="row">
+					
+					<BOUCLE_onepage(ARTICLES){id_rubrique=5}>
+						<div class="col-md-6 block-intro">
+							#LOGO_ARTICLE
+							<div class="texte">
+								<h2>#TITRE</h2>
+								<p>
+								#TEXTE
+								</p>
+							</div>
+						</div>
+					</BOUCLE_onepage>
+					
+					
+				</div>
+			</section>
+		</div>
+		
+		
+		
+		
+		
+		
+		<footer>
+			<INCLURE{fond=inclure/footer, lang}>
+		</footer>
+	</body>	
+</html>

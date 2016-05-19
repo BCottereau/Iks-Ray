@@ -1,0 +1,39 @@
+/* Projet iks ray */
+
+/* ---------------------- Intro On-page --------------------------------- */
+.container-video{
+	width:100%!important;
+	height:auto!important;
+}
+
+.block-intro{
+	margin-bottom:50px;
+}
+.block-intro img{
+	width:40%;
+	height:auto;
+}
+.block-intro p{
+	text-align:justify;
+}
+
+.block-intro:nth-child(odd){ /* block de Gauche */
+	text-align:right;
+	padding-right:10px;
+	clear:both;
+}
+.block-intro:nth-child(odd) .texte{
+	padding-right:50px;
+}
+.block-intro:nth-child(odd) img{
+	float:right;
+}
+.block-intro:nth-child(even){ /* block de droite */
+	padding-left:10px;
+}
+.block-intro:nth-child(even) .texte{
+	padding-left:50px;
+}
+.block-intro:nth-child(even) img{
+	float:left;
+}
