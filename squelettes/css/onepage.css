@@ -1,39 +1,54 @@
 /* Projet iks ray */
 
-/* ---------------------- Intro On-page --------------------------------- */
+/* ---------------------- Intro On-page ------------------------------ - */
 .container-video{
 	width:100%!important;
 	height:auto!important;
 }
 
+
+.block-intro .texte{
+	padding-left:16%;
+	padding-right:16%;
+}
 .block-intro{
 	margin-bottom:50px;
 }
 .block-intro img{
-	width:40%;
+	width:20%;
 	height:auto;
 }
 .block-intro p{
 	text-align:justify;
 }
 
-.block-intro:nth-child(odd){ /* block de Gauche */
-	text-align:right;
-	padding-right:10px;
-	clear:both;
-}
-.block-intro:nth-child(odd) .texte{
-	padding-right:50px;
-}
+
+
 .block-intro:nth-child(odd) img{
 	float:right;
-}
-.block-intro:nth-child(even){ /* block de droite */
-	padding-left:10px;
-}
-.block-intro:nth-child(even) .texte{
-	padding-left:50px;
+	margin-left:10px;
+	margin-right:20%;
 }
 .block-intro:nth-child(even) img{
 	float:left;
+	margin-left:20%;
+	margin-right:10px;
+}
+
+@media screen and (max-width: 767px) {
+
+.block-intro .texte{
+	padding-left:10px;
+	padding-right:10px;
+}
+.block-intro img{
+	margin-left:10px!important;
+	margin-right:10px!important;
+	width:35%!important;
+}
+.block-intro{
+	margin-bottom:100px;
+}
+
+
 }
