@@ -22,12 +22,12 @@ var ligneNum = 0, rot = 0, equipeJoueur = 2;
 var mode = "explore";
 
 var equipes = [
-	{theme:"Arts Plastiques", couleur:"#a5e034"},
-	{theme:"Cinéma", couleur:"#4242cc"},
-	{theme:"Photographie", couleur:"#00c9ff"},
-	{theme:"Musique", couleur:"#dd2f3c"},
-	{theme:"Art du spectacle", couleur:"#f7e608"},
-	{theme:"beta-testeur", couleur:"#00ff00"}
+	{collection:"Arts plastiques - SA", theme:"Arts Plastiques", couleur:"#a5e034"},
+	{collection:"Cinéma - SC", theme:"Cinéma", couleur:"#4242cc"},
+	{collection:"Photographie - SP", theme:"Photographie", couleur:"#00c9ff"},
+	{collection:"Musique - SM", theme:"Musique", couleur:"#dd2f3c"},
+	{collection:"Arts du spectacle - ST", theme:"Art du spectacle", couleur:"#f7e608"},
+	{collection:"b", theme:"beta-testeur", couleur:"#00ff00"}
 ];
 
 var width = window.innerWidth - 0;
@@ -35,6 +35,7 @@ var height = window.innerHeight - 0;
 var radius = 64;
 var etendu = 3;
 var padding = 1;
+var nbrHexa = 0;
           
 var color = d3.scale.linear()
     .domain([0, 20])
@@ -175,13 +176,13 @@ $("#info-equipe-joueur").html("Équipe : <br>" + equipes[equipeJoueur].theme);
 			.attr("width",(radius*2.38)+"px")
 			.attr("height",(radius*2.38)+"px")
 			.attr("id", "select")
-			.attr("xlink:href", "select.png");
+			.attr("xlink:href", "design/select.png");
 			
 		svg.append("image")
 			.attr("width",(radius*3.3)+"px")
 			.attr("height",(radius*3.3)+"px")
 			.attr("id", "selectRot")
-			.attr("xlink:href", "select-rot.png");
+			.attr("xlink:href", "design/select-rot.png");
 			
 		var select = document.getElementById("select");
 		select.setAttribute("display", "none");
@@ -235,6 +236,9 @@ $("#info-equipe-joueur").html("Équipe : <br>" + equipes[equipeJoueur].theme);
 		}, true);
 
 		
+
+		
+		
 		select.addEventListener("click", function(){
 			/*alert( grille[s].titre + " \n " + livres[s].dispos[0].Collection);*/
 			/*alert( "x " + grille[s].coordinates[0] + " ,     y " + grille[s].coordinates[1]);*/
@@ -257,7 +261,10 @@ $("#info-equipe-joueur").html("Équipe : <br>" + equipes[equipeJoueur].theme);
 							var isbnJoueur = traiteIsbn(result.text);
 							var isbnMap = traiteIsbn(grille[s].isbn);
 							
-							isbnJoueur = isbnJoueur.substring(3,isbnJoueur.length);
+							isbnJoueur = isbnJoueur.substring(3,isbnJoueur.length); // du 3em jusqu'au dernier
+							
+							isbnJoueur = isbnJoueur.substring(0,isbnJoueur.length-3);// de la premiere lettre jusqu'a la derniere -3
+							isbnMap = isbnMap.substring(0,isbnMap.length-3);
 							
 							
 							/*alert("Joueur : " + result.text + "  map : " + grille[s].isbn);*/
@@ -302,6 +309,10 @@ $("#info-equipe-joueur").html("Équipe : <br>" + equipes[equipeJoueur].theme);
 			}
 		
 		}, true);
+		
+		
+		
+		
 		
 		
 		selectRot.addEventListener("click", function(){
@@ -367,7 +378,6 @@ function creaGrille(){
 		limit1 = 0,
 		limit2 = etendu; //nombre d'hexagone autour du centre
 		
-		
 	//alert(livres[1].Titre);
 	
 	var bgcolor = "#eee";
@@ -405,14 +415,17 @@ function creaGrille(){
 				titre:"" + livres[k].Titre,
 				isbn: "" + livres[k].isbn,
 				bgcolor: "" + bgcolor,
+				collection:livres[k].dispos[0].Collection,
 				couverture: livres[k].couverture,
 				ligneNum: -1,
 				rot:0,
-				equipe:-1
+				equipe:-1,
+				idLigne:0
                 
             });		        				        		
             i++;
 			k++;
+			nbrHexa++;
         }
         if (j < 0) {
             limit1--;
@@ -421,8 +434,6 @@ function creaGrille(){
         }
 		
     }
-
-	
     // http://goo.gl/8djhT
 	var tilted = false, // true is horizontal alignment
 		size = radius*2; // hexagon size
@@ -441,13 +452,11 @@ function creaGrille(){
         d.y = Math.round(y * 1e2) / 1e2;
         d.visible = !outbounds(x, y);
     });
-
 }
 
 function outbounds(x, y) {
     return x < padding || x > width - padding || y < padding || y > height - padding;
 }
-
 function zoomed() {
   svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 }
@@ -460,6 +469,15 @@ function dragged(d) {
 }
 function dragended(d) {
   d3.select(this).classed("dragging", false);
+}
+function traiteIsbn(isbn){
+	isbn = isbn.split("-");
+	isbn = isbn.join("");
+	isbn = isbn.split(" ");
+	isbn = isbn.join("");
+	isbn = isbn.split(".");
+	isbn = isbn.join("");
+	return isbn;
 }
 
 /* fonction retourne l'id d'un hexagone à partir de X et Y */
@@ -474,86 +492,266 @@ function getHexaId( x, y){
 	return id;
 }
 
-function traiteIsbn(isbn){
-	isbn = isbn.split("-");
-	isbn = isbn.join("");
-	isbn = isbn.split(" ");
-	isbn = isbn.join("");
-	isbn = isbn.split(".");
-	isbn = isbn.join("");
-	return isbn;
+/* fonction retourne un tableau de 2 cases [x,x] contenant l'id de l'hexa suivant. en fonction de la ligne  (-1 si aucun) */
+function getNextHexa(id){
+	var result = [-1, -1];
+	var x = grille[id].coordinates[0];
+	var y = grille[id].coordinates[1];
+	// rot = 0, 60, 120, 180, 240, 300, 0 etc.
+	
+	if(grille[id].ligneNum == 0) // petit virage
+	{
+		     if(grille[id].rot == 0){   result[0] = getHexaId( x, y-1 );	result[1] = getHexaId( x+1, y ); }
+		else if(grille[id].rot == 60){  result[0] = getHexaId( x+1, y-1 );	result[1] = getHexaId( x,   y+1 ); }
+		else if(grille[id].rot == 120){ result[0] = getHexaId( x+1, y );	result[1] = getHexaId( x-1, y+1 ); }
+		else if(grille[id].rot == 180){ result[0] = getHexaId( x, y+1 );	result[1] = getHexaId( x-1, y ); }
+		else if(grille[id].rot == 240){ result[0] = getHexaId( x-1, y+1 );	result[1] = getHexaId( x,   y-1 ); }
+		else if(grille[id].rot == 300){ result[0] = getHexaId( x-1, y );	result[1] = getHexaId( x+1, y-1 ); }
+	}
+	else if(grille[id].ligneNum == 1) // épingle à cheveux
+	{
+		     if(grille[id].rot == 0){   result[0] = getHexaId( x+1, y-1 );  result[1] = getHexaId( x+1, y ); }
+		else if(grille[id].rot == 60){  result[0] = getHexaId( x+1, y );  result[1] = getHexaId( x, y+1 ); }
+		else if(grille[id].rot == 120){ result[0] = getHexaId( x, y+1 );  result[1] = getHexaId( x-1, y+1 ); }
+		else if(grille[id].rot == 180){ result[0] = getHexaId( x-1, y+1 );  result[1] = getHexaId( x-1, y ); }
+		else if(grille[id].rot == 240){ result[0] = getHexaId( x-1, y );  result[1] = getHexaId( x, y-1 ); }
+		else if(grille[id].rot == 300){ result[0] = getHexaId( x, y-1 );  result[1] = getHexaId( x+1, y-1 ); }
+	}
+	else if(grille[id].ligneNum == 2) // tout droit
+	{
+		     if(grille[id].rot == 0){   result[0] = getHexaId( x-1, y );  result[1] = getHexaId( x+1, y ); }
+		else if(grille[id].rot == 60){  result[0] = getHexaId( x, y-1 );  result[1] = getHexaId( x, y+1 ); }
+		else if(grille[id].rot == 120){ result[0] = getHexaId( x+1, y-1 );  result[1] = getHexaId( x-1, y+1 ); }
+		else if(grille[id].rot == 180){ result[0] = getHexaId( x+1, y );  result[1] = getHexaId( x-1, y ); }
+		else if(grille[id].rot == 240){ result[0] = getHexaId( x, y+1 );  result[1] = getHexaId( x, y-1 ); }
+		else if(grille[id].rot == 300){ result[0] = getHexaId( x-1, y+1 );  result[1] = getHexaId( x+1, y-1 ); }
+		
+		/*   if(grille[id].rot == 0){   result[0] = getHexaId( x, y );  result[1] = getHexaId( x, y ); }
+		else if(grille[id].rot == 60){  result[0] = getHexaId( x, y );  result[1] = getHexaId( x, y ); }
+		else if(grille[id].rot == 120){ result[0] = getHexaId( x, y );  result[1] = getHexaId( x, y ); }
+		else if(grille[id].rot == 180){ result[0] = getHexaId( x, y );  result[1] = getHexaId( x, y ); }
+		else if(grille[id].rot == 240){ result[0] = getHexaId( x, y );  result[1] = getHexaId( x, y ); }
+		else if(grille[id].rot == 300){ result[0] = getHexaId( x, y );  result[1] = getHexaId( x, y ); }*/
+	}
+
+	
+	return result;
 }
 
+// fonction vérifie si le voisin V de la selection est bien connecté à lui meme
+function checkLink(v, select){
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	if(v != -1 && grille[v].equipe != -1)
+	{
+		if(grille[select].equipe == grille[v].equipe)
+		{
+			var connexion = getNextHexa(v);
+			if(connexion[0] == select || connexion[1] == select)
+			{
+				return true;
+			}
+		}
+	}
+	
+	return false;
+}
+
+function calculLignes(){
+
+		for(i = 0 ; i < nbrHexa ; i++)// RESET
+		{
+			document.getElementById("g-" + i).classList.remove("id-ligne-" + grille[i].idLigne);
+			document.getElementById("g-" + i).classList.remove("ligne-gras")
+			grille[i].idLigne = 0;
+		}
+
+		// ajout d'une piece invisible, pour simplifier les tests. 
+		// représente le test d'une pièce vide, ou un obstacle, exemple: if(grille[x].idLigne == 0)
+		grille.push({
+			id: nbrHexa,
+			coordinates: [10, 10],
+			lastSelected: 0,
+			type: 'regular',
+			idUti: -1,
+			login: "",
+			nbDoc: -1,
+			role: "",
+			resource: false,
+			length:10*10,
+			nom:"exa "+10+","+10,
+			titre:"test",
+			isbn: "99998888123",
+			bgcolor: "#fff",
+			collection:"none",
+			couverture: "design/logo-mini.png",
+			ligneNum: -1,
+			rot:11,
+			equipe:-1,
+			idLigne:0
+		});	
+		
+		//alert(nbrHexa);
+	
+		var voisins = getNextHexa(s);
+		var j = 0;
+		var idLigne = 1;
+		var a = 0;
+		var b = 0;
+		
+		for(i = 0 ; i < nbrHexa ; i++)
+		{
+			if(grille[i].equipe != -1)
+			{
+				idLigne++;
+				j = i;
+				voisins = getNextHexa(j);
+				a = voisins[0];
+				b = voisins[1];
+				if(a == -1){a = nbrHexa;}
+				if(b == -1){b = nbrHexa;}
+				if(checkLink(a, j) == false){a = nbrHexa;}
+				if(checkLink(b, j) == false){b = nbrHexa;}
+				
+				
+				if( grille[a].idLigne == 0 && grille[b].idLigne == 0 )
+				{
+					grille[j].idLigne = idLigne;
+				}
+				else
+				{
+					// a ou b ?
+					if(grille[a].idLigne > 0)
+					{
+						grille[j].idLigne = grille[a].idLigne;
+					}
+					else
+					{
+						grille[j].idLigne = grille[b].idLigne;
+					}
+				}
+				//document.getElementById("g-" + j).classList.add("id-ligne-" + grille[j].idLigne);
+				//document.getElementById("g-" + j).classList.add("ligne-gras");
+				
+				if(grille[a].idLigne > 0 && grille[b].idLigne > 0)
+				{
+					if(grille[a].idLigne != grille[b].idLigne)
+					{
+						//alert("aaa");
+						idLigne++;
+						for(k = 0 ; k < nbrHexa ; k++)
+						{
+							if(grille[k].idLigne == grille[a].idLigne || grille[k].idLigne == grille[b].idLigne)
+							{
+								//document.getElementById("g-" + k).classList.remove("id-ligne-" + grille[k].idLigne);
+								grille[k].idLigne = idLigne;
+								//document.getElementById("g-" + k).classList.add("id-ligne-" + grille[k].idLigne);
+								//document.getElementById("g-" + k).classList.add("ligne-gras")
+							}
+						}
+					}
+				}
+				
+			}
+		}
+		
+		
+		// correction des erreurs (1 hexa de mauvaise couleur au milieu d'une ligne )
+		var dd = 0, ddd = 0, dddd = 0;
+		for(i = 0 ; i < nbrHexa ; i++)
+		{
+			if(grille[i].idLigne > 0)
+			{
+				voisins = getNextHexa(i);
+				a = voisins[0];
+				b = voisins[1];
+				if(a == -1){a = nbrHexa;}
+				if(b == -1){b = nbrHexa;}
+				if(checkLink(a, i) == false){a = nbrHexa;}
+				if(checkLink(b, i) == false){b = nbrHexa;}
+				
+				if(grille[i].idLigne != grille[a].idLigne && a != 0)// erreur trouvé
+				{
+					//alert(grille[i].idLigne + "\n" + grille[a].idLigne + "\n" + grille[b].idLigne);
+					dd = grille[i].idLigne;
+					ddd = grille[a].idLigne;
+					dddd = grille[b].idLigne;// on prend les trois ID des lignes, et on en garde qu'un seul
+					for(k = 0 ; k < nbrHexa ; k++)
+					{
+						if(grille[k].idLigne > 0)
+						{
+							if(grille[k].idLigne == dd || grille[k].idLigne == ddd || grille[k].idLigne == dddd )
+							{
+								grille[k].idLigne = dd;
+							}
+						}
+					}
+				}
+			}
+		}
+		
+
+}
+	
+
+function calculPoints()
+{
+	var t = [];
+	var k = 0;
+	var point = 1;
+	
+	for(i = 0; i < nbrHexa ; i++)
+	{
+		k = 0;
+		for(j = 0; j < t.length ; j++)
+		{
+			if(t[j].ligne == grille[i].idLigne){k = 1; break;}
+		}
+		// t[j]  = une ligne
+		
+		if(grille[i].idLigne > 0)
+		{
+			if(equipes[grille[i].equipe].collection != grille[i].collection)
+			{
+				point = 2;
+			}
+			else{point = 1;}
+			
+			if( k == 0 )// et qu'il n'y a pas la ligne dans le T
+			{
+				t.push({
+					ligne:grille[i].idLigne,
+					pts:point,
+					hexa:1,
+					equipe:grille[i].equipe
+				});
+			}
+			else if( k == 1 ) // sinon la ligne existe deja dans T
+			{
+				t[j].pts += point;
+				t[j].hexa++;
+			}
+		}
+	}
+	
+	t.sort(function (b, a) {
+		if (a.pts > b.pts)
+		  return 1;
+		if (a.pts < b.pts)
+		  return -1;
+		return 0;
+	});
+
+	var score = "";
+	for (i = 0 ; i < t.length ; i++){
+		score += t[i].pts + "pts       Longueur : " + t[i].hexa + "       Equipe : " + equipes[t[i].equipe].theme + "\n";
+		
+	}
+	alert(score);
+	//alert(t[0].ligne);
+	
+	return t;
+
+}
 	
 	
 	
@@ -561,70 +759,68 @@ function traiteIsbn(isbn){
 	
 	
 	$('#btncodebarre').click(function(event){
-	
 		cordova.plugins.barcodeScanner.scan(function(result){
 			if(!result.cancelled)
 			{
 				alert(result.text);
-				/*
-				$('#isbn').text('isbn : ' + result.text);
-				
-				$.getJSON('https://www.googleapis.com/books/v1/volumes?q=' + result.text, 
-				{
-					q: 'isbn:'+result.text
-				}, function(data) {
-					$('#titre').text("aaaaaa");
-					$('#titre').text(data.items[0].volumeInfo.title);
-				});
-				*/
 			}
 		}, function(error){
 			alert("Erreur : " + error);
 		});
+	});
+	
+	$('#btn-dev').click(function(event){
+	
+		var devTest = prompt("Changer équipe \n 0, 1, 2, 3, 4, 5", 0);
+		
+		if(devTest >= 0 && devTest <= 6 && devTest)
+		{
+			equipeJoueur = devTest;
+			$(".icone-equipe-joueur").css("background-color", equipes[equipeJoueur].couleur);
+			$("#info-equipe-joueur").html("Équipe : <br>" + equipes[equipeJoueur].theme);
+		}else{alert("erreur.");}
 	
 	});
 	
 	
+	$('#btn-calcul').click(function(event){
 	
-	/*
-	$('.btnphoto').click(function(event){
-
-		//alert("Click");
-		
-		
-		navigator.camera.getPicture(
-			function(image) {
-				$('#maphoto').attr('src', 'data:image/jpeg;base64,' + image);
-			},
-			function() {
-				alert('Erreur !'); 
-			},
+		calculLignes();
+		/*
+		for(i = 0 ; i < nbrHexa ; i++)
+		{
+			if(grille[i].idLigne > 0)
 			{
-				quality: 75,
-				sourceType: Camera.PictureSourceType.CAMERA,
-				cameraDirection: Camera.Direction.BACK,
-				targetWidth: 500,
-				targetHeight: 500,
-				destinationType: Camera.DestinationType.DATA_URL
+				document.getElementById("g-" + i).classList.add("id-ligne-" + grille[i].idLigne);
+				document.getElementById("g-" + i).classList.add("ligne-gras")
 			}
-		);
-	});*/
-	
-	$('#btn1').click(function(event){
-	
-		navigator.vibrate(2000);
+		}*/
+		
+		var scores = calculPoints();
+		
+		for(i = 0 ; i < nbrHexa ; i++)
+		{
+			document.getElementById("g-" + i).classList.remove("test");
+			if(grille[i].idLigne == scores[0].ligne)
+			{
+				document.getElementById("g-" + i).classList.add("test");
+			}
+		}
 	
 	});
+	
+	
+	
+	
 	
 	$('#btn2').click(function(event){
-	
 		navigator.vibrate([50, 50, 200, 300, 500, 600, 50, 50, 50, 50, 50, 50]);
-	
-	});
-	
-	$('#btn3').click(function(event){
-	
 		navigator.notification.beep(1);
+	});
+	
+	$('#btn-reset').click(function(event){
+	
+		alert("je fait rien");
 	
 	});
 	
@@ -635,16 +831,7 @@ function traiteIsbn(isbn){
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 	
 	
