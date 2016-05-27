@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html dir="#LANG_DIR" lang="#LANG">
+	<head>
+		<meta charset="utf-8" />
+		<title>#NOM_SITE_SPIP</title>
+		<!--<meta name="description" content=" " />
+		<meta name="keywords" content=" " />-->
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" /> 
+		<link rel="icon" type="image/png" href="#CHEMIN{design/icon.png}" />
+		<link href="#CHEMIN{bootstrap/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
+		<link href="#CHEMIN{css/reset.css}" rel="stylesheet" type="text/css"/>
+		<link href="#CHEMIN{css/style.css}" rel="stylesheet" type="text/css"/>
+		<link href="#CHEMIN{css/menu.css}" rel="stylesheet" type="text/css"/>
+		<script type="text/javascript" src="#CHEMIN{js/jquery-2.1.4.min.js}"></script>
+		<script type="text/javascript" src="#CHEMIN{js/ghi-nav.js}"></script>
+		<script type="text/javascript" src="#CHEMIN{js/menu.js}"></script>
+	</head>
+	<body>
+		<header>
+			<INCLURE{fond=inclure/header, lang}>
+		</header>
+		
+		
+		<div id="content">
+			<section class="container">
+				<form id="form" action="#" method="get">
+					<div class="row">
+						<div class="col-md-12 centre">
+							<h1>Inscription</h1>
+							<br>
+							
+							<p><strong>Pseudo</strong></p>
+							<input type="text" name="pseudo" maxlength="20" placeholder="écris ton pseudo ici"/>
+							
+							<p><strong>Mot de passe</strong></p>
+							<input type="password" name="mdp" maxlength="20" placeholder="écris ton mot de passe"/>
+							
+							<p><strong>Confirme ton mot de passe</strong></p>
+							<input type="password" name="mdp2" maxlength="20" placeholder="écris ton mot de passe"/>
+							
+							<p><strong>E-mail</strong></p>
+							<input type="email" name="email" maxlength="40" placeholder="écris ton adresse E-mail"/>
+							
+							<br>
+							<input type="submit" value="Valider" />
+							
+						</div>
+					</div>
+				</form>
+			</section>
+		</div>
+		<script>
+			document.getElementById("form").addEventListener("submit", function(e){
+				var erreur = "";
+				
+				var pseudo = document.getElementsByName("pseudo")[0];
+				var mdp = document.getElementsByName("mdp")[0];
+				var mdp2 = document.getElementsByName("mdp2")[0];
+				var email = document.getElementsByName("email")[0];
+				
+				if(pseudo.value.length < 3){
+					erreur += "Ton pseudo doit contenir au moins 3 caractères.\n";
+				}
+				if(mdp.value != mdp2.value){
+					erreur += "Les deux mots de passe ne concordent pas.\n";
+				}
+				if(mdp.value.length < 4){
+					erreur += "Le mot de passe doit contenir au moins 4 caractères.\n";
+				}
+				if(email.value.length < 5){
+					erreur += "Ton email n'est pas valide.\n";
+				}
+			
+				if(erreur != "")
+				{
+					alert(erreur);
+					e.preventDefault();
+				}
+			}, true);
+		</script>
+		
+		
+		<footer>
+			<INCLURE{fond=inclure/footer, lang}>
+		</footer>
+	</body>	
+</html>
