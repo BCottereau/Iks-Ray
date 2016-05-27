@@ -11,10 +11,9 @@
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
 		<link href="css/reset.css" rel="stylesheet" type="text/css"/>
 		<link href="css/style.css" rel="stylesheet" type="text/css"/>
-		<link href="css/menu.css" rel="stylesheet" type="text/css"/>
+		<link href="css/jeu.css" rel="stylesheet" type="text/css"/>
 		<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
 		<script type="text/javascript" src="js/ghi-nav.js"></script>
-		<script type="text/javascript" src="js/menu.js"></script>
 		<script src="js/d3.v3.min.js"></script>
 		<script src="js/d3.hexbin.min.js"></script>
 		<script src="js/queue.v1.min.js" ></script>
@@ -42,70 +41,58 @@
 						</ul>
 					</nav>
 				</div>
+				<div class="row">
+					<div class="col-sm-12 centre">
+
+						
+					
+					</div>
+				</div>
+				<div class="row" id="interface-pose">
+					<div class="col-sm-12 centre">
+						<p><strong>Choisis</strong> et <strong>tourne</strong> la pièce</p>
+						<br>
+						<!--<button id="btn-p0">0</button><button id="btn-p1">1</button><button id="btn-p2">2</button> -->
+						<img id="btn-p0" src="design/p0.png" alt="O 1"/>
+						<img id="btn-p1" src="design/p1.png" alt="O 2"/>
+						<img id="btn-p2" src="design/p2.png" alt="O 3"/>
+						<br><br>
+						<button id="btn-valider"> Valider </button>
+					</div>
+				</div>
+				<div class="row" id="interface-infos">
+					<div class="col-xs-5 centre">
+						<img id="infos-couverture" src="livre.jpg" alt="couverture"/>
+					</div>
+					<div class="col-xs-7">
+						<p id="collection">collection</p>
+						<p id="titre">titre</p>
+						<br>
+						<p>Cote : </p>
+						<p id="cote">cote</p>
+					</div>
+				</div>
 			</div>
 		</header>
-		
 		<div id="content">
+		</div>
+		<!--
+		<div>
 			<section class="container">
-				<form id="form" action="salle.html" method="get">
-					<div class="row">
-						<div class="col-md-12 centre">
-							<h1>Inscription</h1>
-							<br>
-							
-							<p><strong>Pseudo</strong></p>
-							<input type="text" name="pseudo" maxlength="20" placeholder="écris ton pseudo ici"/>
-							
-							<p><strong>Mot de passe</strong></p>
-							<input type="password" name="mdp" maxlength="20" placeholder="écris ton mot de passe"/>
-							
-							<p><strong>Confirme ton mot de passe</strong></p>
-							<input type="password" name="mdp2" maxlength="20" placeholder="écris ton mot de passe"/>
-							
-							<p><strong>E-mail</strong></p>
-							<input type="email" name="email" maxlength="40" placeholder="écris ton adresse E-mail"/>
-							
-							<br>
-							<input type="submit" value="Valider" />
-							
-						</div>
+				<div class="row">
+					<div class="col-md-12">
+						
+						
+						<input value=" - Vibre - " type="button" id="btn1" /> <br>
+						<input value=" - Vibre - " type="button" id="btn2" /> <br>
+						<input value=" - BEEEP - " type="button" id="btn3" /> <br>
+						
 					</div>
-				</form>
+				</div>
 			</section>
 		</div>
-		<script>
-			document.getElementById("form").addEventListener("submit", function(e){
-				var erreur = "";
-				
-				var pseudo = document.getElementsByName("pseudo")[0];
-				var mdp = document.getElementsByName("mdp")[0];
-				var mdp2 = document.getElementsByName("mdp2")[0];
-				var email = document.getElementsByName("email")[0];
-				
-				if(pseudo.value.length < 3){
-					erreur += "Ton pseudo doit contenir au moins 3 caractères.\n";
-				}
-				if(mdp.value != mdp2.value){
-					erreur += "Les deux mots de passe ne concordent pas.\n";
-				}
-				if(mdp.value.length < 4){
-					erreur += "Le mot de passe doit contenir au moins 4 caractères.\n";
-				}
-				if(email.value.length < 5){
-					erreur += "Ton email n'est pas valide.\n";
-				}
-			
-				if(erreur != "")
-				{
-					alert(erreur);
-					e.preventDefault();
-				}
-			}, true);
-		</script>
-
+		-->
 		
-		
-		
-		
+		<script type="text/javascript" src="js/main.js"></script>
 	</body>	
 </html>

@@ -21,6 +21,14 @@ var s = 0;
 var ligneNum = 0, rot = 0, equipeJoueur = 2;
 var mode = "explore";
 
+		var url = window.location.href.split("?");
+		if(url[1]) /* provisoire */
+		{
+			url = url[1];
+			url = url.split("=");
+			if(url[1]){ equipeJoueur = url[1]; }
+		}
+
 var equipes = [
 	{collection:"Arts plastiques - SA", theme:"Arts Plastiques", couleur:"#a5e034"},
 	{collection:"Cinéma - SC", theme:"Cinéma", couleur:"#4242cc"},

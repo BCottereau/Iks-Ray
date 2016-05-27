@@ -47,61 +47,46 @@
 		
 		<div id="content">
 			<section class="container">
-				<form id="form" action="salle.html" method="get">
-					<div class="row">
-						<div class="col-md-12 centre">
-							<h1>Inscription</h1>
-							<br>
-							
-							<p><strong>Pseudo</strong></p>
-							<input type="text" name="pseudo" maxlength="20" placeholder="écris ton pseudo ici"/>
-							
-							<p><strong>Mot de passe</strong></p>
-							<input type="password" name="mdp" maxlength="20" placeholder="écris ton mot de passe"/>
-							
-							<p><strong>Confirme ton mot de passe</strong></p>
-							<input type="password" name="mdp2" maxlength="20" placeholder="écris ton mot de passe"/>
-							
-							<p><strong>E-mail</strong></p>
-							<input type="email" name="email" maxlength="40" placeholder="écris ton adresse E-mail"/>
-							
-							<br>
-							<input type="submit" value="Valider" />
-							
+				<div class="row">
+					<div class="col-md-12 centre">
+						<h2>Où veux-tu jouer ?</h2>
+						<br>
+						<p id="etage-1" class="choix-etage"><strong>étage 1 </strong> &nbsp; &nbsp; <span class="glyphicon glyphicon-triangle-right"></span></p>
+						<p id="etage-2" class="choix-etage"><span class="glyphicon glyphicon-triangle-left"></span>  &nbsp; &nbsp;  <strong>étage 2 </strong></p>
+						
+
+						
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div id="container-slider">
+							<ul>
+								<li>
+									<!-- étage 1 -->
+									<div class="plan">
+										<img id="e1" src="design/e1.png"/>
+										<a href="#" class="salle-vert"> </a>
+										<a href="#" class="salle-orange"> </a>
+										<a href="#" class="salle-violet"> </a>
+									</div>
+								</li>
+								<li>
+									<!-- étage 2 -->
+									<div class="plan">
+										<img id="e2" src="design/e2.png"/>
+										<a href="#" class="salle-rose"> </a>
+										<a href="#" class="salle-bleu"> </a>
+										<a href="#" class="salle-rouge"> </a>
+										<a href="#" class="salle-marron"> </a>
+									</div>
+								</li>
+							</ul>
 						</div>
 					</div>
-				</form>
+				</div>
 			</section>
 		</div>
-		<script>
-			document.getElementById("form").addEventListener("submit", function(e){
-				var erreur = "";
-				
-				var pseudo = document.getElementsByName("pseudo")[0];
-				var mdp = document.getElementsByName("mdp")[0];
-				var mdp2 = document.getElementsByName("mdp2")[0];
-				var email = document.getElementsByName("email")[0];
-				
-				if(pseudo.value.length < 3){
-					erreur += "Ton pseudo doit contenir au moins 3 caractères.\n";
-				}
-				if(mdp.value != mdp2.value){
-					erreur += "Les deux mots de passe ne concordent pas.\n";
-				}
-				if(mdp.value.length < 4){
-					erreur += "Le mot de passe doit contenir au moins 4 caractères.\n";
-				}
-				if(email.value.length < 5){
-					erreur += "Ton email n'est pas valide.\n";
-				}
-			
-				if(erreur != "")
-				{
-					alert(erreur);
-					e.preventDefault();
-				}
-			}, true);
-		</script>
 
 		
 		

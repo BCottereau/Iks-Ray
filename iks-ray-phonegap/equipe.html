@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>iks Ray</title>
+		<meta name="description" content=" " />
+		<meta name="keywords" content=" " />
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" /> 
+		<link rel="icon" type="image/png" href="design/icon.png" />
+		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+		<link href="css/reset.css" rel="stylesheet" type="text/css"/>
+		<link href="css/style.css" rel="stylesheet" type="text/css"/>
+		<link href="css/menu.css" rel="stylesheet" type="text/css"/>
+		<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+		<script type="text/javascript" src="js/ghi-nav.js"></script>
+		<script type="text/javascript" src="js/menu.js"></script>
+		<script src="js/d3.v3.min.js"></script>
+		<script src="js/d3.hexbin.min.js"></script>
+		<script src="js/queue.v1.min.js" ></script>
+		<script src="cordova.js"></script> <!--  fonctions du téléphone -->
+	</head>
+	<body>
+		<header>
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-4">
+						<img id="logo" src="design/logo.png" title="iks-ray" alt="logo de iks-ray"/>
+						<img id="logo-mini" src="design/logo-mini.png" title="iks-ray" alt="logo de iks-ray"/>
+						<img id="btn-nav" src="design/bstrap.png" alt="menu"/>
+						<img id="btn-equipe-phone" class="icone-equipe-joueur" src="design/equipe.png" alt="equipe"/>
+						<p id="info-equipe-joueur">équipe</p>
+					</div>
+					<nav class="col-sm-8 menu">
+						
+						<ul>
+							<li><a id="btn-reset" href="#">Reset</a></li>
+							<li><a id="btncodebarre" href="#">Scan un livre</a></li>
+							<li><a id="btn-dev" href="#">Menu DEV.</a></li>
+							<li><a id="btn-calcul" href="#">Calcul Points</a></li>
+							<li class="hidden-xs btn-equipe-pc"><a href="#"><img class="icone-equipe-joueur" src="design/equipe.png" title="Votre équipe" alt="equipe"/></a></li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</header>
+
+		<div id="content">
+			<section class="container">
+				<div class="row">
+					<div class="col-md-12 centre">
+						<img id="salle-choisis" src="design/salle-rose.png"/>
+						<script>
+							var salle = window.location.href.split("?");
+							if(salle[1])
+							{
+								salle = salle[1];
+								salle = salle.split("=");
+								salle = salle[1];
+								document.getElementById("salle-choisis").src = "design/salle-" + salle + ".png";
+							}
+						</script>
+						<br><br>
+						<h2>Choisis ton équipe</h2>
+						<p>la partie va commencer.</p>
+						<form action="#" method="get">
+							<table>
+								<tr>
+									<td><span class="glyphicon glyphicon-triangle-bottom"></span></td>
+									<td>Équipe</td>
+									<td>Place(s) restantes</td>
+								</tr>
+								<tr>
+									<td><span class="logo-equipe" style="background-color:#a5e034;"><img src="design/equipe.png"/></span></td>
+									<td><a href="jeu.html?equipe=0">Arts Plastiques</a></td>
+									<td> 4 / 5 </td>
+								</tr>
+								<tr>
+									<td><span class="logo-equipe" style="background-color:#4242cc;"><img src="design/equipe.png"/></span></td>
+									<td><a href="jeu.html?equipe=1">Cinéma</a></td>
+									<td> 2 / 5 </td>
+								</tr>
+								<tr>
+									<td><span class="logo-equipe" style="background-color:#00c9ff;"><img src="design/equipe.png"/></span></td>
+									<td><a href="jeu.html?equipe=2">Photographie</a></td>
+									<td> 3 / 5 </td>
+								</tr>
+								<tr>
+									<td><span class="logo-equipe" style="background-color:#dd2f3c;"><img src="design/equipe.png"/></span></td>
+									<td><a href="jeu.html?equipe=3">Musique</a></td>
+									<td> 2 / 5 </td>
+								</tr>
+								<!--
+								<tr>
+									<td><span class="logo-equipe" style="background-color:#f7e608;"><img src="design/equipe.png"/></span></td>
+									<td><a href="jeu.html?equipe=4">Art du spectacle</a></td>
+									<td> 2 / 5 </td>
+								</tr>-->
+							</table>
+							 <!-- <input type="submit" value="Valider" />    simple lien ou formulaire ? -->
+						</form>
+						
+
+						
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+
+					
+					</div>
+				</div>
+			</section>
+		</div>
+		
+		
+		
+	</body>	
+</html>
